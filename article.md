@@ -44,7 +44,27 @@ IncidentIQ: I'll help you investigate. When did the problem start?
 This allows even non-technical users to begin the incident-reporting process.
 ![AI Incident Investigation](/screenshots/investigation.png)
  Figure 2 — The incident feed with severity, service, status, investigation controls, and access to past fixes.
- 
+
+```typescript
+export interface Incident {
+  id: string;
+  title: string;
+  description: string;
+  category: IncidentCategory;
+  severity: IncidentSeverity;
+  status: IncidentStatus;
+  affectedService: string;
+  // ...
+  rootCause?: string;
+  resolutionNotes?: string;
+  failedApproaches?: string[];
+  timeline: TimelineEvent[];
+  recommendedActions: RecommendedAction[];
+  similarIncidentIds: string[];
+  postMortem?: PostMortem;
+}
+```
+
  Persistent Memory with Hindsight:
  
 The most important technical aspect of IncidentIQ is its use of Hindsight for persistent agent memory.
@@ -71,6 +91,25 @@ This creates a continuous learning cycle for the incident-response system.
  ![Hindsight Persistent Memory](/screenshots/memory.png)
 Figure 3 — Agent Memory stores the incident patterns the agent can retrieve later
 
+```typescript
+export interface AgentMemoryEntry {
+  id: string;
+  incidentId: string;
+  incidentTitle: string;
+  service: string;
+  symptoms: string[];
+  rootCause: string;
+  successfulFix: string;
+  successfulRunbookId?: string;
+  successfulRunbookTitle?: string;
+  failedApproaches: string[];
+  resolutionTimeMinutes: number;
+  date: string;
+  timesReferenced: number;
+  lessonsLearned: string;
+}
+```
+
 Similar Incident Detection:
 
 IncidentIQ can connect a current incident with previous incidents that contain similar symptoms, services, errors, or root causes.
@@ -81,6 +120,27 @@ It can also use organization-specific operational experience.
 If no relevant historical incident exists, the system should clearly indicate that it could not find a close match instead of presenting an unsupported historical explanation.
  ![Hindsight Persistent Memory](/screenshots/history.png)
 Figure 4 — Incident intake: the engineer describes what happened in plain language and provides the minimum context needed for investigation.
+
+```typescript
+const res = await fetch('/api/gemini/investigate', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    description: data.description,
+    category: data.category,
+    severity: data.severity,
+    memoryBank: memoryBank.map((m) => ({
+      id: m.id,
+      incidentTitle: m.incidentTitle,
+      service: m.service,
+      symptoms: m.symptoms,
+      rootCause: m.rootCause,
+      successfulFix: m.successfulFix,
+      resolutionTimeMinutes: m.resolutionTimeMinutes,
+    })),
+  }),
+});
+```
 
 Recommended Actions and Runbooks:
 
@@ -157,6 +217,40 @@ The overall concept can be represented as:
   ![Hindsight Persistent Memory](/screenshots/flow.jpeg)
 Figure 7 - Architecture of system
 
+```typescript
+const descWords = new Set(
+  desc
+    .replace(/[^a-z0-9 ]/g, ' ')
+    .split(/\s+/)
+    .filter((w) => w.length > 2)
+);
+
+for (const mem of memories) {
+  let score = 0;
+  const memText =
+    `${mem.incidentTitle} ${mem.service} ${mem.rootCause} ${mem.symptoms.join(' ')}`
+      .toLowerCase();
+
+  const memWords = memText
+    .replace(/[^a-z0-9 ]/g, ' ')
+    .split(/\s+/)
+    .filter((w) => w.length > 2);
+
+  for (const w of descWords) {
+    if (memWords.includes(w)) {
+      score += 1;
+
+      if (
+        ['payment', 'pool', 'timeout', '504', '500',
+         'lock', 'database', 'postgres', 'redis', 'crash']
+          .includes(w)
+      ) {
+        score += 2;
+      }
+    }
+  }
+}
+```
 Conclusion:
 
 IncidentIQ combines AI-assisted incident investigation, historical incident knowledge, runbooks, post-mortems, and persistent agent memory into a single workflow.
