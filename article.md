@@ -136,7 +136,7 @@ Contains previous incidents, runbooks, resolutions, and post-mortems.
 Hindsight
 Provides persistent memory for the AI agent so useful information from previous incidents can be retrieved later.
 The overall concept can be represented as:
- 
+  ![Hindsight Persistent Memory](screenshot/floew.jpeg)
 
 11. Conclusion
 IncidentIQ combines AI-assisted incident investigation, historical incident knowledge, runbooks, post-mortems, and persistent agent memory into a single workflow.
