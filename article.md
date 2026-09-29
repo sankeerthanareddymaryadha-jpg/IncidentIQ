@@ -1,17 +1,22 @@
 IncidentIQ: An AI Incident Response System with Persistent Memory
-Abstract
+
+Abstract:
+
 Production incidents require engineers to make quick decisions using incomplete information. In many organizations, previous incidents contain valuable knowledge about root causes, successful fixes, failed approaches, and recovery procedures, but this knowledge is often difficult to reuse when a similar problem occurs.
 IncidentIQ is an AI-powered incident response application designed to make this knowledge reusable. It helps users report incidents, investigate problems, identify similar historical incidents, receive recommended actions, follow runbooks, and document the final resolution.
 The key feature of IncidentIQ is persistent AI memory using Hindsight. Instead of treating every incident as a completely new problem, the system can retain useful information from resolved incidents and use that information when similar incidents occur in the future.
 
-1. Introduction
+Introduction:
+   
 Incident management is an important part of maintaining reliable software systems. When a service fails, engineers need to quickly understand what happened, identify the affected component, determine the possible cause, and select an appropriate recovery procedure.
 The problem is that incident information is often scattered across tickets, documents, chat messages, runbooks, and post-mortems. Even when a similar problem has happened before, engineers may have to manually search through previous records.
 IncidentIQ addresses this problem by combining AI-assisted investigation with persistent incident memory.
 The objective is not to replace engineers. Instead, IncidentIQ acts as an intelligent support assistant that provides relevant historical context and recommendations while keeping humans in control of important production actions.
  ![IncidentIQ Dashboard](/screenshots/dashboard.png)
+Figure 1 — Incident IQ dashboard with active incidents, critical priority, AI investigations, and resolved incidents.
 
-2. System Workflow
+System Workflow:
+
 The main workflow of IncidentIQ is:
 Report Incident → AI Investigation → Historical Search → Similar Incidents → Recommended Actions → Runbook → Resolution → Post-Mortem → Agent Memory
 A user begins by describing an incident in simple language.
@@ -21,7 +26,8 @@ The AI analyzes the description, identifies relevant information, and uses avail
 If a similar incident is found, IncidentIQ can provide information about the previous problem, its root cause, and how it was resolved.
 
 
-3. AI Incident Investigation
+AI Incident Investigation:
+
 IncidentIQ uses a conversational approach rather than requiring users to fill out a complicated technical form.
 The agent can understand information such as:
 •	What happened
@@ -37,8 +43,10 @@ User: The payment system is down.
 IncidentIQ: I'll help you investigate. When did the problem start?
 This allows even non-technical users to begin the incident-reporting process.
 ![AI Incident Investigation](/screenshots/investigation.png)
+ Figure 2 — The incident feed with severity, service, status, investigation controls, and access to past fixes.
  
-5. Persistent Memory with Hindsight
+ Persistent Memory with Hindsight:
+ 
 The most important technical aspect of IncidentIQ is its use of Hindsight for persistent agent memory.
 During incident resolution, useful information can include:
 •	Incident description
@@ -61,8 +69,10 @@ IncidentIQ can identify the similarity and provide historical context such as:
 “A similar incident occurred previously. The root cause was related to database connections, and the issue was resolved using the Payment Recovery runbook.”
 This creates a continuous learning cycle for the incident-response system.
  ![Hindsight Persistent Memory](/screenshots/memory.png)
+Figure 3 — Agent Memory stores the incident patterns the agent can retrieve later
 
-6. Similar Incident Detection
+Similar Incident Detection:
+
 IncidentIQ can connect a current incident with previous incidents that contain similar symptoms, services, errors, or root causes.
 A historical incident can provide:
 Incident → Root Cause → Resolution → Result
@@ -70,8 +80,10 @@ This is useful because the AI does not have to rely only on general model knowle
 It can also use organization-specific operational experience.
 If no relevant historical incident exists, the system should clearly indicate that it could not find a close match instead of presenting an unsupported historical explanation.
  ![Hindsight Persistent Memory](/screenshots/history.png)
+Figure 4 — Incident intake: the engineer describes what happened in plain language and provides the minimum context needed for investigation.
 
-8. Recommended Actions and Runbooks
+Recommended Actions and Runbooks:
+
 After analyzing an incident, IncidentIQ can provide recommended next steps.
 For example:
 1.	Check database connection status.
@@ -81,9 +93,11 @@ For example:
 5.	Monitor the service after recovery.
 Runbooks provide structured instructions that help users follow a consistent recovery process.
 The system can also explain why an action is being recommended and, when available, connect the recommendation to previous successful incidents.
-![Hindsight Persistent Memory](/screenshors/history1.png)
+![Hindsight Persistent Memory](/screenshots/history1.png)
+Figure 5 — Incident intake: the engineer describes what happened in plain language and provides the minimum context needed for investigation.
 
-7. Human-Controlled Production Actions
+Human-Controlled Production Actions:
+
 IncidentIQ is designed with a human-in-the-loop approach.
 The AI should not independently perform potentially dangerous production operations.
 Actions such as:
@@ -96,7 +110,8 @@ The workflow is:
 AI Recommendation → Explanation → User Review → Confirmation → Action
 This keeps the engineer responsible for important production decisions while allowing the AI to reduce investigation effort.
 
-8. Incident Resolution and Post-Mortem
+Incident Resolution and Post-Mortem:
+
 Once an incident is resolved, IncidentIQ can maintain a timeline of the incident:
 Reported → Investigating → Fix Applied → Monitoring → Resolved → Closed
 The system can then help generate a post-mortem containing:
@@ -110,8 +125,10 @@ The system can then help generate a post-mortem containing:
 •	Lessons learned
 The post-mortem is not simply documentation. Its useful information can become future agent memory.
  ![Hindsight Persistent Memory](/screenshots/resolution.png)
+Figure 6 — Agent Memory stores the incident patterns the agent can retrieve later: root causes, successful fixes, and reuse history.
 
-9. Key Features
+Key Features:
+
 The major capabilities of IncidentIQ include:
 Feature	Purpose
 Incident Reporting	Allows users to report problems easily
@@ -125,7 +142,8 @@ Post-Mortem	Documents causes and lessons
 Incident History	Allows previous incidents to be reviewed
 Human Confirmation	Prevents uncontrolled critical actions
 
-10. Technology Concept
+Technology Concept:
+
 The system combines several technologies and concepts:
 Frontend
 Provides the incident-reporting interface, dashboard, AI conversation, incident history, and runbook views.
@@ -137,8 +155,10 @@ Hindsight
 Provides persistent memory for the AI agent so useful information from previous incidents can be retrieved later.
 The overall concept can be represented as:
   ![Hindsight Persistent Memory](/screenshots/flow.jpeg)
+Figure 7 - Architecture of system
 
-11. Conclusion
+Conclusion:
+
 IncidentIQ combines AI-assisted incident investigation, historical incident knowledge, runbooks, post-mortems, and persistent agent memory into a single workflow.
 The central idea is simple:
 IncidentIQ remembers how previous problems were investigated and resolved, then uses that experience to help with similar problems in the future.
